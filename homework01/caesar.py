@@ -68,10 +68,18 @@ def caesar_breaker_brute_force(ciphertext: str, dictionary: tp.Set[str]) -> int:
     Brute force breaking a Caesar cipher.
     """
     best_shift = 0
+    match = 0
     
     for i in range(1, 26):
-        if decrypt_caesar(ciphertext, i) in dictionary:
-            best_shift = i;
+        words = decrypt_caesar( ciphertext, i ).split(" ")
+        count = 0
+        for word in words:
+            if word in dictionary:
+                count += 1
+
+        if count > match: 
+            match = count
+            best_shift = i
 
     return best_shift
 
