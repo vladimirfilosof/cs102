@@ -18,19 +18,20 @@ def encrypt_caesar(plaintext: str, shift: int = 3) -> str:
     shift = shift % 26
     if shift != 0:
         for ch in plaintext:
-            if 'a' <= ch <= 'z':
+            if "a" <= ch <= "z":
                 ch = chr(ord(ch) + shift)
-                if not ('a' <= ch <= 'z'):
-                    ch = chr(ord(ch) - ord('z') + ord('a') - 1)
-            elif 'A' <= ch <= 'Z':
+                if not ("a" <= ch <= "z"):
+                    ch = chr(ord(ch) - ord("z") + ord("a") - 1)
+            elif "A" <= ch <= "Z":
                 ch = chr(ord(ch) + shift)
-                if not ('A' <= ch <= 'Z'):
-                    ch = chr(ord(ch) - ord('Z') + ord('A') - 1)
+                if not ("A" <= ch <= "Z"):
+                    ch = chr(ord(ch) - ord("Z") + ord("A") - 1)
             ciphertext += ch
     else:
         return plaintext
-            
+
     return ciphertext
+
 
 def decrypt_caesar(ciphertext: str, shift: int = 3) -> str:
     """
@@ -49,19 +50,20 @@ def decrypt_caesar(ciphertext: str, shift: int = 3) -> str:
     shift = shift % 26
     if shift != 0:
         for ch in ciphertext:
-            if 'a' <= ch <= 'z':
+            if "a" <= ch <= "z":
                 ch = chr(ord(ch) - shift)
-                if not ('a' <= ch <= 'z'):
-                    ch = chr(ord(ch) + ord('z') - ord('a') + 1)
-            elif 'A' <= ch <= 'Z':
+                if not ("a" <= ch <= "z"):
+                    ch = chr(ord(ch) + ord("z") - ord("a") + 1)
+            elif "A" <= ch <= "Z":
                 ch = chr(ord(ch) - shift)
-                if not ('A' <= ch <= 'Z'):
-                    ch = chr(ord(ch) + ord('Z') - ord('A') + 1)
+                if not ("A" <= ch <= "Z"):
+                    ch = chr(ord(ch) + ord("Z") - ord("A") + 1)
             plaintext += ch
     else:
         return ciphertext
-            
+
     return plaintext
+
 
 def caesar_breaker_brute_force(ciphertext: str, dictionary: tp.Set[str]) -> int:
     """
@@ -69,17 +71,16 @@ def caesar_breaker_brute_force(ciphertext: str, dictionary: tp.Set[str]) -> int:
     """
     best_shift = 0
     match = 0
-    
+
     for i in range(1, 26):
-        words = decrypt_caesar( ciphertext, i ).split(" ")
+        words = decrypt_caesar(ciphertext, i).split(" ")
         count = 0
         for word in words:
             if word in dictionary:
                 count += 1
 
-        if count > match: 
+        if count > match:
             match = count
             best_shift = i
 
     return best_shift
-
