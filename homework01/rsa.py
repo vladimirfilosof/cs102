@@ -39,6 +39,10 @@ def gcd(a: int, b: int) -> int:
     >>> gcd(3, 7)
     1
     """
+    if a == 0:
+        return b
+    if b == 0:
+        return a
     if a == b:
         return a
     elif (a > b):
@@ -54,9 +58,30 @@ def multiplicative_inverse(e: int, phi: int) -> int:
     >>> multiplicative_inverse(7, 40)
     23
     """
-    # PUT YOUR CODE HERE
-    pass
-
+    A = []
+    B = []
+    mod = []
+    div = []
+    
+    i = 0
+    A.append(phi)
+    B.append(e)
+    while True:
+        mod.append(A[i] % B[i])
+        div.append(math.floor(A[i] / B[i]))
+        A.append(B[i])
+        B.append(mod[i])
+        i += 1
+        if A[i - 1] % B[i - 1] == 0:
+            break
+    
+    x = [0]
+    y = [1]
+    for i in range(1, len(A) - 1):
+        x.append(y[i-1])
+        y.append(x[i-1] - y[i-1] * div[len(div) - i - 1])
+    
+    return y[-1] % phi
 
 def generate_keypair(p: int, q: int) -> tp.Tuple[tp.Tuple[int, int], tp.Tuple[int, int]]:
     if not (is_prime(p) and is_prime(q)):
