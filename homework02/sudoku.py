@@ -47,7 +47,7 @@ def group(values: tp.List[T], n: int) -> tp.List[tp.List[T]]:
     >>> group([1,2,3,4,5,6,7,8,9], 3)
     [[1, 2, 3], [4, 5, 6], [7, 8, 9]]
     """
-    matrix = []
+    matrix: tp.List[tp.List[T]] = [] 
     for i in range(n):
         matrix.append([])
         for j in range(n):
@@ -166,21 +166,21 @@ def solve(grid: tp.List[tp.List[str]]) -> tp.Optional[tp.List[tp.List[str]]]:
     [['5', '3', '4', '6', '7', '8', '9', '1', '2'], ['6', '7', '2', '1', '9', '5', '3', '4', '8'], ['1', '9', '8', '3', '4', '2', '5', '6', '7'], ['8', '5', '9', '7', '6', '1', '4', '2', '3'], ['4', '2', '6', '8', '5', '3', '7', '9', '1'], ['7', '1', '3', '9', '2', '4', '8', '5', '6'], ['9', '6', '1', '5', '3', '7', '2', '8', '4'], ['2', '8', '7', '4', '1', '9', '6', '3', '5'], ['3', '4', '5', '2', '8', '6', '1', '7', '9']]
     """
     pos = find_empty_positions(grid)
-    if pos != None:
+    if pos is not None:
         values = find_possible_values(grid, pos)
         if len(values) > 0:
-            values = list(values)
-            random.shuffle(values)
-            for i in values:
+            values_l = list(values)
+            random.shuffle(values_l)
+            for i in values_l:
                 temp_grid = copy.deepcopy(grid)
                 temp_grid[pos[0]][pos[1]] = i
                 s = solve(temp_grid)
-                if s != None and find_empty_positions(s) == None:
+                if s is not None and find_empty_positions(s) == None:
                     return s
         else:
             return None
-    else:
-        return grid
+
+    return grid
 
 
 def check_solution(solution: tp.List[tp.List[str]]) -> bool:
@@ -190,22 +190,22 @@ def check_solution(solution: tp.List[tp.List[str]]) -> bool:
 
     for i in range(len(solution)):
         values = get_row(solution, (i, 0))
-        for j in values:
-            if values.count(j) > 1:
+        for ch in values:
+            if values.count(ch) > 1:
                 print(values)
                 return False
 
         values = get_col(solution, (0, i))
-        for j in values:
-            if values.count(j) > 1:
+        for ch in values:
+            if values.count(ch) > 1:
                 print(values)
                 return False
 
-    for i in range(int(len(solution) / 3)):
+    for i in range(int(len(solution) // 3)):
         for j in range(int(len(solution) / 3)):
             values = get_block(solution, (i * 3, j * 3))
-            for j in values:
-                if values.count(j) > 1:
+            for ch in values:
+                if values.count(ch) > 1:
                     print(values)
                     return False
 
@@ -240,36 +240,39 @@ def generate_sudoku(N: int) -> tp.List[tp.List[str]]:
 
     full_grid = solve(grid)
 
-    for i in range(random.randint(40, 50)):
-        row = random.randint(0, 8)
-        col = random.randint(0, 8)
-        row_block = math.floor(row / 3)
-        col_block = math.floor(col / 3)
-        shift_row = random.randint(1, 2)
-        shift_col = random.randint(1, 2)
-        row = row_block * 3
-        col = col_block * 3
-        full_grid[row], full_grid[row + shift_row] = (
-            full_grid[row + shift_row],
-            full_grid[row],
-        )
-        full_grid[col], full_grid[col + shift_col] = (
-            full_grid[col + shift_col],
-            full_grid[col],
-        )
+    if full_grid is not None:
+        for i in range(random.randint(40, 50)):
+            row = random.randint(0, 8)
+            col = random.randint(0, 8)
+            row_block = math.floor(row / 3)
+            col_block = math.floor(col / 3)
+            shift_row = random.randint(1, 2)
+            shift_col = random.randint(1, 2)
+            row = row_block * 3
+            col = col_block * 3
+            full_grid[row], full_grid[row + shift_row] = (
+                full_grid[row + shift_row],
+                full_grid[row],
+            )
+            full_grid[col], full_grid[col + shift_col] = (
+                full_grid[col + shift_col],
+                full_grid[col],
+            )
 
-    if N >= 81:
+        if N >= 81:
+            return full_grid
+
+        i = 0
+        while i < 81 - N:
+            row = random.randint(0, 8)
+            col = random.randint(0, 8)
+            if full_grid[row][col] != ".":
+                full_grid[row][col] = "."
+                i += 1
+
         return full_grid
-
-    i = 0
-    while i < 81 - N:
-        row = random.randint(0, 8)
-        col = random.randint(0, 8)
-        if full_grid[row][col] != ".":
-            full_grid[row][col] = "."
-            i += 1
-
-    return full_grid
+    else:
+        return grid
 
 
 if __name__ == "__main__":
