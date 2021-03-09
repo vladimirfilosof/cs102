@@ -48,6 +48,7 @@ def group(values: tp.List[T], n: int) -> tp.List[tp.List[T]]:
     [[1, 2, 3], [4, 5, 6], [7, 8, 9]]
     """
     matrix: tp.List[tp.List[T]] = [] 
+
     for i in range(n):
         matrix.append([])
         for j in range(n):
