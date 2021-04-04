@@ -53,7 +53,6 @@ class GameOfLife:
         return [
             [
                 1
-
                 if (self.curr_generation[i][j] == 1 and 2 <= sum(self.get_neighbours((i, j))) <= 3) 
                 or (self.curr_generation[i][j] == 0 and sum(self.get_neighbours((i, j))) == 3)
                 else 0
