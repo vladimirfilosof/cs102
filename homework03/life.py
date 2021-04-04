@@ -42,7 +42,7 @@ class GameOfLife:
                 continue
 
             for j in range(cell[1] - 1, cell[1] + 2):
-                if ((i == cell[0] and j == cell[1]) or j < 0 or j >= len(self.curr_generation[i])):
+                if (i == cell[0] and j == cell[1]) or j < 0 or j >= len(self.curr_generation[i]):
                     continue
 
                 neighbours.append(self.curr_generation[i][j])
@@ -53,6 +53,7 @@ class GameOfLife:
         return [
             [
                 1
+
                 if (self.curr_generation[i][j] == 1 and 2 <= sum(self.get_neighbours((i, j))) <= 3) 
                 or (self.curr_generation[i][j] == 0 and sum(self.get_neighbours((i, j))) == 3)
                 else 0

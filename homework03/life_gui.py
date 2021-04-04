@@ -44,7 +44,7 @@ class GUI(UI):
 
         running = True
         pause = False
-        while (running and self.life.is_changing and self.life.is_max_generations_exceeded):
+        while running and self.life.is_changing and self.life.is_max_generations_exceeded:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     running = False
@@ -57,7 +57,9 @@ class GUI(UI):
                     if event.button == 1:
                         col = event.pos[0] // self.cell_size
                         row = event.pos[1] // self.cell_size
-                        self.life.curr_generation[row][col] = not self.life.curr_generation[row][col]
+                        self.life.curr_generation[row][col] = not self.life.curr_generation[row][
+                            col
+                        ]
 
             if not pause:
                 self.life.step()
