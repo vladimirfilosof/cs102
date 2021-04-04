@@ -1,6 +1,7 @@
 import pygame
-from life import GameOfLife
 from pygame.locals import *
+
+from life import GameOfLife
 from ui import UI
 
 
@@ -68,7 +69,7 @@ class GUI(UI):
                         ] = not self.life.curr_generation[row][col]
 
             if not pause:
-                self.grid = self.life.step()
+                self.life.step()
 
             self.draw_grid()
             self.draw_lines()

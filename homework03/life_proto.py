@@ -1,9 +1,9 @@
 import random
+import time
 import typing as tp
 
 import pygame
 from pygame.locals import *
-import time
 
 Cell = tp.Tuple[int, int]
 Cells = tp.List[int]

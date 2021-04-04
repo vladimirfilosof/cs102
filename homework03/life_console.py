@@ -1,10 +1,9 @@
 import curses
 import curses.ascii
+import time
 
 from life import GameOfLife
 from ui import UI
-
-import time
 
 
 class Console(UI):
