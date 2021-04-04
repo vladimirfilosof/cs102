@@ -37,8 +37,8 @@ class Console(UI):
 
     def draw_grid(self, screen) -> None:
         """ Отобразить состояние клеток. """
-        for i in range (len(self.life.curr_generation)):
-            for j in range (len(self.life.curr_generation[i])):
+        for i in range(len(self.life.curr_generation)):
+            for j in range(len(self.life.curr_generation[i])):
                 try:
                     if self.life.curr_generation[i][j]:
                         screen.addch(i + 1, j + 1, "*")
@@ -48,7 +48,6 @@ class Console(UI):
                 except:
                     pass
 
-
     def run(self) -> None:
         curses.initscr()
         screen = curses.newwin(self.life.rows + 2, self.life.cols + 2, 0, 0)
@@ -57,18 +56,22 @@ class Console(UI):
         curses.cbreak()
         screen.keypad(True)
         screen.nodelay(True)
-    
+
         self.draw_borders(screen)
-        
+
         pause = False
         key = 0
-        while key != curses.ascii.ESC and self.life.is_changing and self.life.is_max_generations_exceeded:
+        while (
+            key != curses.ascii.ESC
+            and self.life.is_changing
+            and self.life.is_max_generations_exceeded
+        ):
             self.draw_grid(screen)
             screen.refresh()
 
             prevKey = key
             event = screen.getch()
-            key = key if event == -1 else event 
+            key = key if event == -1 else event
 
             if key == curses.ascii.SP:
                 key = -1
@@ -81,7 +84,6 @@ class Console(UI):
                 pause = not pause
 
             self.life.step()
-
 
         curses.nocbreak()
         screen.keypad(False)

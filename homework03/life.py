@@ -24,15 +24,15 @@ class GameOfLife:
         # Текущее поколение клеток
         self.curr_generation = self.create_grid(randomize=randomize)
         # Максимальное число поколений
-        self.max_generations = max_generations
+        self.max_generations = max_generations or float("inf")
         # Текущее число поколений
         self.generations = 1
 
     def create_grid(self, randomize: bool = False) -> Grid:
-        return [ 
-                    [ int(randomize) and random.randint(0,1) for j in range(self.cols) ]  
-                    for i in range(self.rows) 
-                ]
+        return [
+            [int(randomize) and random.randint(0, 1) for j in range(self.cols)]
+            for i in range(self.rows)
+        ]
 
     def get_neighbours(self, cell: Cell) -> Cells:
         neighbours = []
@@ -42,20 +42,34 @@ class GameOfLife:
                 continue
 
             for j in range(cell[1] - 1, cell[1] + 2):
-                if (i == cell[0] and j == cell[1]) or j < 0 or j >= len(self.curr_generation[i]):
+                if (
+                    (i == cell[0] and j == cell[1])
+                    or j < 0
+                    or j >= len(self.curr_generation[i])
+                ):
                     continue
-    
+
                 neighbours.append(self.curr_generation[i][j])
 
         return neighbours
 
     def get_next_generation(self) -> Grid:
         return [
-                 [ 
-                    1 if (self.curr_generation[i][j] == 1 and 2 <= sum( self.get_neighbours((i,j)) ) <= 3) 
-                    or (self.curr_generation[i][j] == 0 and sum( self.get_neighbours((i,j)) ) == 3) else 0 
-                for j in range(self.cols) ] 
-            for i in range(self.rows)  ]
+            [
+                1
+                if (
+                    self.curr_generation[i][j] == 1
+                    and 2 <= sum(self.get_neighbours((i, j))) <= 3
+                )
+                or (
+                    self.curr_generation[i][j] == 0
+                    and sum(self.get_neighbours((i, j))) == 3
+                )
+                else 0
+                for j in range(self.cols)
+            ]
+            for i in range(self.rows)
+        ]
 
     def step(self) -> None:
         """
@@ -64,7 +78,6 @@ class GameOfLife:
         self.prev_generation = self.curr_generation
         self.curr_generation = self.get_next_generation()
         self.generations += 1
-
 
     @property
     def is_max_generations_exceeded(self) -> bool:
@@ -90,10 +103,10 @@ class GameOfLife:
         """
         Прочитать состояние клеток из указанного файла.
         """
-        f = open(filename, 'r')
-        grid = []
+        f = open(filename, "r")
+        grid: Grid = []
         for line in f:
-            grid.append(list(line[:-1]))
+            grid.append([ int(i) for i in line[:-1] ])
         f.close()
         life = GameOfLife((len(grid), len(grid[0])))
         life.curr_generation = grid
@@ -103,10 +116,9 @@ class GameOfLife:
         """
         Сохранить текущее состояние клеток в указанный файл.
         """
-        f = open(filename, 'w')
+        f = open(filename, "w")
         for row in self.curr_generation:
             for i in row:
                 f.write(str(i))
 
             f.write("\n")
-

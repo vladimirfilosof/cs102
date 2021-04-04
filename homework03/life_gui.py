@@ -16,15 +16,29 @@ class GUI(UI):
 
     def draw_lines(self) -> None:
         for x in range(0, self.width, self.cell_size):
-            pygame.draw.line(self.screen, pygame.Color("black"), (x, 0), (x, self.height))
+            pygame.draw.line(
+                self.screen, pygame.Color("black"), (x, 0), (x, self.height)
+            )
         for y in range(0, self.height, self.cell_size):
-            pygame.draw.line(self.screen, pygame.Color("black"), (0, y), (self.width, y))
+            pygame.draw.line(
+                self.screen, pygame.Color("black"), (0, y), (self.width, y)
+            )
 
     def draw_grid(self) -> None:
         for y in range(self.life.rows):
             for x in range(self.life.cols):
-                pygame.draw.rect(self.screen, pygame.Color('green') if self.life.curr_generation[y][x] else pygame.Color('white'),
-                        pygame.Rect(x * self.cell_size, y * self.cell_size, self.cell_size, self.cell_size))
+                pygame.draw.rect(
+                    self.screen,
+                    pygame.Color("green")
+                    if self.life.curr_generation[y][x]
+                    else pygame.Color("white"),
+                    pygame.Rect(
+                        x * self.cell_size,
+                        y * self.cell_size,
+                        self.cell_size,
+                        self.cell_size,
+                    ),
+                )
 
     def run(self) -> None:
         pygame.init()
@@ -34,9 +48,11 @@ class GUI(UI):
 
         running = True
         pause = False
-        while running and self.life.is_changing and self.life.is_max_generations_exceeded:
+        while (
+            running and self.life.is_changing and self.life.is_max_generations_exceeded
+        ):
             for event in pygame.event.get():
-                if event.type == QUIT:
+                if event.type == pygame.QUIT:
                     running = False
                 elif event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_SPACE:
@@ -47,9 +63,10 @@ class GUI(UI):
                     if event.button == 1:
                         col = event.pos[0] // self.cell_size
                         row = event.pos[1] // self.cell_size
-                        self.life.curr_generation[row][col] = not self.life.curr_generation[row][col]
+                        self.life.curr_generation[row][
+                            col
+                        ] = not self.life.curr_generation[row][col]
 
-            
             if not pause:
                 self.grid = self.life.step()
 
